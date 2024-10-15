@@ -24,6 +24,8 @@ import {
 } from '../constants'
 
 const SDK_URL = 'https://cdn.y8.com/api/sdk.js'
+const USERDATA_KEY = 'userData'
+const NOT_FOUND_ERROR = 'Key not found'
 
 class Y8PlatformBridge extends PlatformBridgeBase {
     // platform
@@ -107,45 +109,41 @@ class Y8PlatformBridge extends PlatformBridgeBase {
         return super.isStorageAvailable(storageType)
     }
 
+    #getUserDataFromStorage() {
+        return new Promise((resolve, reject) => {
+            this._platformSdk.api('user_data/retrieve', 'POST', { key: USERDATA_KEY }, ((response) => {
+                if (response.error) {
+                    if (response.error !== NOT_FOUND_ERROR) {
+                        reject(response)
+                    }
+                }
+
+                let userData = {}
+
+                try {
+                    if (response.jsondata) {
+                        userData = JSON.parse(response.jsondata)
+                    }
+                } catch (e) {
+                    // keep value string or null
+                }
+
+                resolve(userData)
+            }))
+        })
+    }
+
     getDataFromStorage(key, storageType, tryParseJson) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             return new Promise((resolve, reject) => {
-                /* if (Array.isArray(key)) {
-                    const values = []
-                    key.forEach((k) => {
-                        let value = this._platformSdk.data.getItem(k)
+                this.#getUserDataFromStorage()
+                    .then((userData) => {
+                        const keys = Array.isArray(key) ? key : [key]
+                        const data = keys.map((_key) => userData[_key] ?? null)
 
-                        if (tryParseJson) {
-                            try {
-                                value = JSON.parse(value)
-                            } catch (e) {
-                                // keep value string or null
-                            }
-                        }
-                        values.push(value)
+                        resolve(data)
                     })
-
-                    resolve(values)
-                    return
-                } */
-
-                this._platformSdk.api('user_data/retrieve', 'POST', { key }, ((response) => {
-                    if (response.jsondata) {
-                        let value = response.jsondata
-
-                        if (tryParseJson) {
-                            try {
-                                value = JSON.parse(response.jsondata)
-                            } catch (e) {
-                                // keep value string or null
-                            }
-                        }
-
-                        resolve(value)
-                    } else {
-                        reject(response)
-                    }
-                }))
+                    .catch(reject)
             })
         }
 
@@ -155,48 +153,33 @@ class Y8PlatformBridge extends PlatformBridgeBase {
     setDataToStorage(key, value, storageType) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             return new Promise((resolve, reject) => {
-                let _value = value
+                this.#getUserDataFromStorage()
+                    .then((userData) => {
+                        const newData = { ...userData }
 
-                if (Array.isArray(key)) {
-                    const promises = []
+                        if (Array.isArray(key)) {
+                            for (let i = 0; i < key.length; i++) {
+                                let valueData = value[i]
 
-                    for (let i = 0; i < key.length; i++) {
-                        let valueData = _value[i]
+                                if (typeof value[i] !== 'string') {
+                                    valueData = JSON.stringify(value[i])
+                                }
 
-                        if (typeof _value[i] !== 'string') {
-                            valueData = JSON.stringify(_value[i])
+                                newData[key[i]] = valueData
+                            }
+                        } else {
+                            newData[key] = value
                         }
 
-                        const promise = new Promise((resolvePromise, rejectPromise) => {
-                            this._platformSdk.api('user_data/submit', 'POST', { key: key[i], value: valueData }, ((response) => {
-                                if (response.status === 'ok') {
-                                    resolvePromise()
-                                } else {
-                                    rejectPromise()
-                                }
-                            }))
-                        })
-                        promises.push(promise)
-                    }
-
-                    Promise.all(promises)
-                        .then(() => resolve())
-                        .catch(() => reject())
-
-                    return
-                }
-
-                if (typeof _value !== 'string') {
-                    _value = JSON.stringify(_value)
-                }
-
-                this._platformSdk.api('user_data/submit', 'POST', { key, value: _value }, ((response) => {
-                    if (response.status === 'ok') {
-                        resolve()
-                    } else {
-                        reject()
-                    }
-                }))
+                        this._platformSdk.api('user_data/submit', 'POST', { key: USERDATA_KEY, value: JSON.stringify(newData) }, ((response) => {
+                            if (response.status === 'ok') {
+                                resolve()
+                            } else {
+                                reject(response)
+                            }
+                        }))
+                    })
+                    .catch(reject)
             })
         }
 
@@ -205,15 +188,28 @@ class Y8PlatformBridge extends PlatformBridgeBase {
 
     deleteDataFromStorage(key, storageType) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
-            return new Promise((resolve) => {
-                /* if (Array.isArray(key)) {
-                    key.forEach((k) => this._platformSdk.data.removeItem(k))
-                    return Promise.resolve()
-                } */
+            return new Promise((resolve, reject) => {
+                this.#getUserDataFromStorage()
+                    .then((userData) => {
+                        const newData = { ...userData }
 
-                this._platformSdk.api('user_data/remove', 'POST', { key }, (() => {
-                    resolve()
-                }))
+                        if (Array.isArray(key)) {
+                            for (let i = 0; i < key.length; i++) {
+                                delete newData[key[i]]
+                            }
+                        } else {
+                            delete newData[key]
+                        }
+
+                        this._platformSdk.api('user_data/submit', 'POST', { key: USERDATA_KEY, value: JSON.stringify(newData) }, ((response) => {
+                            if (response.status === 'ok') {
+                                resolve()
+                            } else {
+                                reject(response)
+                            }
+                        }))
+                    })
+                    .catch(reject)
             })
         }
 

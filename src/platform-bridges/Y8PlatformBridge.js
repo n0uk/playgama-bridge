@@ -234,19 +234,23 @@ class Y8PlatformBridge extends PlatformBridgeBase {
             this._isPlayerAuthorized = true
             this._defaultStorageType = STORAGE_TYPE.PLATFORM_INTERNAL
 
-            if (data.authResponse.details.pid) {
-                this._playerId = data.authResponse.details.pid
+            const {
+                pid, locale, nickname, first_name: firstName, last_name: lastName, avatars,
+            } = data.authResponse.details
+
+            if (pid) {
+                this._playerId = pid
             }
 
-            this._playerName = data.authResponse.details.first_name
-            if (data.authResponse.details.last_name) {
-                this._playerName = `${this._playerName} ${data.authResponse.details.last_name}`
-            }
+            this._platformLanguage = locale
+
+            this._playerName = [firstName, lastName].filter((x) => !!x).join(' ') || nickname
 
             this._playerPhotos = []
-            const photoSmall = data.authResponse.details.avatars.thumb_url
-            const photoMedium = data.authResponse.details.avatars.medium_url
-            const photoLarge = data.authResponse.details.avatars.large_url
+
+            const {
+                thumb_url: photoSmall, medium_url: photoMedium, large_url: photoLarge,
+            } = avatars
 
             if (photoSmall) {
                 this._playerPhotos.push(photoSmall)

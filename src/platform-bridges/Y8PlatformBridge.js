@@ -20,7 +20,10 @@ import { addJavaScript, waitFor } from '../common/utils'
 import {
     PLATFORM_ID,
     ACTION_NAME,
-    STORAGE_TYPE, ERROR,
+    STORAGE_TYPE,
+    ERROR,
+    INTERSTITIAL_STATE,
+    REWARDED_STATE,
 } from '../constants'
 
 const SDK_URL = 'https://cdn.y8.com/api/sdk.js'
@@ -56,6 +59,7 @@ class Y8PlatformBridge extends PlatformBridgeBase {
 
                         this._platformSdk.Event.subscribe('id.init', (() => {
                             this._platformSdk.ads.init(this._options.gameId)
+
                             this._platformSdk.getLoginStatus((data) => {
                                 this.#updatePlayerInfo(data)
                                 this._isInitialized = true
@@ -212,11 +216,23 @@ class Y8PlatformBridge extends PlatformBridgeBase {
 
     // advertisement
     showInterstitial() {
-
+        this._platformSdk.ads.display(() => {
+            if (!this._platformSdk.ads.strategy) {
+                this._setInterstitialState(INTERSTITIAL_STATE.FAILED)
+            } else {
+                this._setInterstitialState(INTERSTITIAL_STATE.CLOSED)
+            }
+        })
     }
 
     showRewarded() {
-
+        this._platformSdk.ads.display(() => {
+            if (!this._platformSdk.ads.strategy) {
+                this._setRewardedState(REWARDED_STATE.FAILED)
+            } else {
+                this._setInterstitialState(REWARDED_STATE.CLOSED)
+            }
+        })
     }
 
     #updatePlayerInfo(data) {

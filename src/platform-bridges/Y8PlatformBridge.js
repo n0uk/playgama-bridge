@@ -159,13 +159,7 @@ class Y8PlatformBridge extends PlatformBridgeBase {
 
                         if (Array.isArray(key)) {
                             for (let i = 0; i < key.length; i++) {
-                                let valueData = value[i]
-
-                                if (typeof value[i] !== 'string') {
-                                    valueData = JSON.stringify(value[i])
-                                }
-
-                                newData[key[i]] = valueData
+                                newData[key[i]] = value[i]
                             }
                         } else {
                             newData[key] = value

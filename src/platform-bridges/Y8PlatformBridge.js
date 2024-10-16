@@ -216,6 +216,7 @@ class Y8PlatformBridge extends PlatformBridgeBase {
 
     // advertisement
     showInterstitial() {
+        this._setInterstitialState(INTERSTITIAL_STATE.OPENED)
         this._platformSdk.ads.display(() => {
             if (!this._platformSdk.ads.strategy) {
                 this._setInterstitialState(INTERSTITIAL_STATE.FAILED)
@@ -226,11 +227,13 @@ class Y8PlatformBridge extends PlatformBridgeBase {
     }
 
     showRewarded() {
+        this._setRewardedState(REWARDED_STATE.OPENED)
         this._platformSdk.ads.display(() => {
             if (!this._platformSdk.ads.strategy) {
                 this._setRewardedState(REWARDED_STATE.FAILED)
             } else {
-                this._setInterstitialState(REWARDED_STATE.CLOSED)
+                this._setRewardedState(REWARDED_STATE.REWARDED)
+                this._setRewardedState(REWARDED_STATE.CLOSED)
             }
         })
     }

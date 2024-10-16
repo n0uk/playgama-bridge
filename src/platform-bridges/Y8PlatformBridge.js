@@ -143,7 +143,10 @@ class Y8PlatformBridge extends PlatformBridgeBase {
                 this.#getUserDataFromStorage()
                     .then((userData) => {
                         const keys = Array.isArray(key) ? key : [key]
-                        const data = keys.map((_key) => userData[_key] ?? null)
+                        const data = keys.map((_key) => {
+                            const value = userData[_key]
+                            return !tryParseJson && typeof value === 'object' && value !== null ? JSON.stringify(value) : value ?? null
+                        })
 
                         resolve(data)
                     })

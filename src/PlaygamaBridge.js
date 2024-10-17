@@ -211,7 +211,8 @@ class PlaygamaBridge {
                 platformId = PLATFORM_ID.GAME_DISTRIBUTION
             } else if (url.hostname.includes('wortal.ai')) {
                 platformId = PLATFORM_ID.WORTAL
-            } else if (url.searchParams.has('api_id') && url.searchParams.has('viewer_id') && url.searchParams.has('auth_key')) {
+            } else if ((url.searchParams.has('api_id') && url.searchParams.has('viewer_id') && url.searchParams.has('auth_key'))
+                || (url.searchParams.has('vk_app_id') && url.searchParams.has('vk_user_id'))) {
                 platformId = PLATFORM_ID.VK
             } else if (url.searchParams.has('app_id') && url.searchParams.has('player_id') && url.searchParams.has('game_sid') && url.searchParams.has('auth_key')) {
                 platformId = PLATFORM_ID.ABSOLUTE_GAMES
@@ -224,11 +225,11 @@ class PlaygamaBridge {
 
         if (!this._options || !this._options.gameId) {
             const url = new URL(window.location.href)
-            if (url.searchParams.has('game_id')) {
+            if (url.searchParams.has('game_id') || url.searchParams.has('vk_app_id')) {
                 if (!this._options) {
                     this._options = {}
                 }
-                this._options.gameId = url.searchParams.get('game_id')
+                this._options.gameId = url.searchParams.get('game_id') ?? url.searchParams.get('vk_app_id')
             }
         }
 

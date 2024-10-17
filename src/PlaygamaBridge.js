@@ -53,6 +53,7 @@ import PlaygamaPlatformBridge from './platform-bridges/PlaygamaPlatformBridge'
 import PlayDeckPlatformBridge from './platform-bridges/PlayDeckPlatformBridge'
 import WortalPlatformBridge from './platform-bridges/WortalPlatformBridge'
 import TelegramPlatformBridge from './platform-bridges/TelegramPlatformBridge'
+import Y8PlatformBridge from './platform-bridges/Y8PlatformBridge'
 
 class PlaygamaBridge {
     get version() {
@@ -195,10 +196,15 @@ class PlaygamaBridge {
     #createPlatformBridge() {
         let platformId = PLATFORM_ID.MOCK
 
-        if (this._options && this._options.forciblySetPlatformId) {
+        if (!this._options) {
+            this._options = {}
+        }
+
+        const url = new URL(window.location.href)
+
+        if (this._options.forciblySetPlatformId) {
             platformId = this.#getPlatformId(this._options.forciblySetPlatformId.toLowerCase())
         } else {
-            const url = new URL(window.location.href)
             const yandexUrl = ['y', 'a', 'n', 'd', 'e', 'x', '.', 'n', 'e', 't'].join('')
             if (url.searchParams.has('platform_id')) {
                 platformId = this.#getPlatformId(url.searchParams.get('platform_id').toLowerCase())
@@ -210,7 +216,8 @@ class PlaygamaBridge {
                 platformId = PLATFORM_ID.GAME_DISTRIBUTION
             } else if (url.hostname.includes('wortal.ai')) {
                 platformId = PLATFORM_ID.WORTAL
-            } else if (url.searchParams.has('api_id') && url.searchParams.has('viewer_id') && url.searchParams.has('auth_key')) {
+            } else if ((url.searchParams.has('api_id') && url.searchParams.has('viewer_id') && url.searchParams.has('auth_key'))
+                || url.searchParams.has('vk_app_id')) {
                 platformId = PLATFORM_ID.VK
             } else if (url.searchParams.has('app_id') && url.searchParams.has('player_id') && url.searchParams.has('game_sid') && url.searchParams.has('auth_key')) {
                 platformId = PLATFORM_ID.ABSOLUTE_GAMES
@@ -221,81 +228,61 @@ class PlaygamaBridge {
             }
         }
 
-        if (!this._options || !this._options.gameId) {
-            const url = new URL(window.location.href)
-            if (url.searchParams.has('game_id')) {
-                if (!this._options) {
-                    this._options = {}
-                }
-                this._options.gameId = url.searchParams.get('game_id')
-            }
+        const gameIdParam = url.searchParams.get('game_id')
+
+        if (!this._options.gameId && gameIdParam) {
+            this._options.gameId = gameIdParam
         }
+
+        const _options = this._options.platforms?.[platformId] || this._options
 
         switch (platformId) {
             case PLATFORM_ID.VK: {
-                this.#platformBridge = new VkPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.VK],
-                )
+                this.#platformBridge = new VkPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.VK_PLAY: {
-                this.#platformBridge = new VkPlayPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.VK_PLAY],
-                )
+                this.#platformBridge = new VkPlayPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.YANDEX: {
-                this.#platformBridge = new YandexPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.YANDEX],
-                )
+                this.#platformBridge = new YandexPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.CRAZY_GAMES: {
-                this.#platformBridge = new CrazyGamesPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.CRAZY_GAMES],
-                )
+                this.#platformBridge = new CrazyGamesPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.ABSOLUTE_GAMES: {
-                this.#platformBridge = new AbsoluteGamesPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.ABSOLUTE_GAMES],
-                )
+                this.#platformBridge = new AbsoluteGamesPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.GAME_DISTRIBUTION: {
-                this.#platformBridge = new GameDistributionPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.GAME_DISTRIBUTION],
-                )
+                this.#platformBridge = new GameDistributionPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.OK: {
-                this.#platformBridge = new OkPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.OK],
-                )
+                this.#platformBridge = new OkPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.PLAYGAMA: {
-                this.#platformBridge = new PlaygamaPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.PLAYGAMA],
-                )
+                this.#platformBridge = new PlaygamaPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.WORTAL: {
-                this.#platformBridge = new WortalPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.WORTAL],
-                )
+                this.#platformBridge = new WortalPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.PLAYDECK: {
-                this.#platformBridge = new PlayDeckPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.PLAYDECK],
-                )
+                this.#platformBridge = new PlayDeckPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.TELEGRAM: {
-                this.#platformBridge = new TelegramPlatformBridge(
-                    this._options && this._options.platforms && this._options.platforms[PLATFORM_ID.TELEGRAM],
-                )
+                this.#platformBridge = new TelegramPlatformBridge(_options)
+                break
+            }
+            case PLATFORM_ID.Y8: {
+                this.#platformBridge = new Y8PlatformBridge(_options)
                 break
             }
             default: {

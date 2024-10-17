@@ -212,7 +212,7 @@ class PlaygamaBridge {
             } else if (url.hostname.includes('wortal.ai')) {
                 platformId = PLATFORM_ID.WORTAL
             } else if ((url.searchParams.has('api_id') && url.searchParams.has('viewer_id') && url.searchParams.has('auth_key'))
-                || (url.searchParams.has('vk_app_id') && url.searchParams.has('vk_user_id'))) {
+                || url.searchParams.has('vk_app_id')) {
                 platformId = PLATFORM_ID.VK
             } else if (url.searchParams.has('app_id') && url.searchParams.has('player_id') && url.searchParams.has('game_sid') && url.searchParams.has('auth_key')) {
                 platformId = PLATFORM_ID.ABSOLUTE_GAMES

@@ -225,11 +225,11 @@ class PlaygamaBridge {
 
         if (!this._options || !this._options.gameId) {
             const url = new URL(window.location.href)
-            if (url.searchParams.has('game_id') || url.searchParams.has('vk_app_id')) {
+            if (url.searchParams.has('game_id')) {
                 if (!this._options) {
                     this._options = {}
                 }
-                this._options.gameId = url.searchParams.get('game_id') ?? url.searchParams.get('vk_app_id')
+                this._options.gameId = url.searchParams.get('game_id')
             }
         }
 

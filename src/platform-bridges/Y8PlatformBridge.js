@@ -113,30 +113,6 @@ class Y8PlatformBridge extends PlatformBridgeBase {
         return super.isStorageAvailable(storageType)
     }
 
-    #getUserDataFromStorage() {
-        return new Promise((resolve, reject) => {
-            this._platformSdk.api('user_data/retrieve', 'POST', { key: USERDATA_KEY }, ((response) => {
-                if (response.error) {
-                    if (response.error !== NOT_FOUND_ERROR) {
-                        reject(response)
-                    }
-                }
-
-                let userData = {}
-
-                try {
-                    if (response.jsondata) {
-                        userData = JSON.parse(response.jsondata)
-                    }
-                } catch (e) {
-                    // keep value string or null
-                }
-
-                resolve(userData)
-            }))
-        })
-    }
-
     getDataFromStorage(key, storageType, tryParseJson) {
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             return new Promise((resolve, reject) => {
@@ -238,6 +214,30 @@ class Y8PlatformBridge extends PlatformBridgeBase {
                 this._setRewardedState(REWARDED_STATE.REWARDED)
                 this._setRewardedState(REWARDED_STATE.CLOSED)
             }
+        })
+    }
+
+    #getUserDataFromStorage() {
+        return new Promise((resolve, reject) => {
+            this._platformSdk.api('user_data/retrieve', 'POST', { key: USERDATA_KEY }, ((response) => {
+                if (response.error) {
+                    if (response.error !== NOT_FOUND_ERROR) {
+                        reject(response)
+                    }
+                }
+
+                let userData = {}
+
+                try {
+                    if (response.jsondata) {
+                        userData = JSON.parse(response.jsondata)
+                    }
+                } catch (e) {
+                    // keep value string or null
+                }
+
+                resolve(userData)
+            }))
         })
     }
 

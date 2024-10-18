@@ -54,6 +54,7 @@ import PlayDeckPlatformBridge from './platform-bridges/PlayDeckPlatformBridge'
 import WortalPlatformBridge from './platform-bridges/WortalPlatformBridge'
 import TelegramPlatformBridge from './platform-bridges/TelegramPlatformBridge'
 import Y8PlatformBridge from './platform-bridges/Y8PlatformBridge'
+import LaggedPlatformBridge from './platform-bridges/LaggedPlatformBridge'
 
 class PlaygamaBridge {
     get version() {
@@ -283,6 +284,11 @@ class PlaygamaBridge {
             }
             case PLATFORM_ID.Y8: {
                 this.#platformBridge = new Y8PlatformBridge(_options)
+                break
+            }
+
+            case PLATFORM_ID.LAGGED: {
+                this.#platformBridge = new LaggedPlatformBridge(_options)
                 break
             }
             default: {

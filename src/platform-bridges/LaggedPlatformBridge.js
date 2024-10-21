@@ -34,7 +34,11 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
         return PLATFORM_ID.LAGGED
     }
 
-    get isLeaderboardNativePopupSupported() {
+    get isLeaderboardSupported() {
+        return true
+    }
+
+    get isLeaderboardSetScoreSupported() {
         return true
     }
 
@@ -66,15 +70,16 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
                         this._platformSdk.User.get((response) => {
                             const { id, name, avatar } = response?.user ?? {}
 
-                            this._playerId = id
-                            this._playerName = name
-                            this._playerPhotos.push(avatar)
+                            if (id > 0) {
+                                this._playerId = id
+                                this._playerName = name
+                                this._playerPhotos.push(avatar)
+                                this._isPlayerAuthorized = true
+                            }
 
-                            this._isPlayerAuthorized = this._playerId > 0
+                            this._isInitialized = true
+                            this._resolvePromiseDecorator(ACTION_NAME.INITIALIZE)
                         })
-
-                        this._isInitialized = true
-                        this._resolvePromiseDecorator(ACTION_NAME.INITIALIZE)
                     })
                 })
             }
@@ -137,7 +142,7 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
             return Promise.reject()
         }
 
-        if (!options?.score || !options?.board) {
+        if (!options?.score || !options?.boardId) {
             return Promise.reject()
         }
 
@@ -150,32 +155,18 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
                 options.score = parseInt(options.score, 10)
             }
 
-            this._platformSdk.Scores.save(options, (response) => {
+            const params = {
+                score: options.score,
+                board: options.boardId,
+            }
+
+            this._platformSdk.Scores.save(params, (response) => {
                 if (response.success) {
                     this._resolvePromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
                 } else {
                     this._rejectPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE, response.errormsg)
                 }
             })
-        }
-
-        return promiseDecorator.promise
-    }
-
-    showLeaderboardNativePopup() {
-        let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP)
-        if (!promiseDecorator) {
-            promiseDecorator = this._createPromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP)
-
-            const scoresShownPromise = new Promise((resolve) => {
-                this._platformSdk.Scores.load(null, resolve)
-            })
-
-            Promise.race([scoresShownPromise, Promise.reject()])
-                .then(() => {
-                    this._resolvePromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP)
-                })
-                .catch(() => this._rejectPromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP))
         }
 
         return promiseDecorator.promise

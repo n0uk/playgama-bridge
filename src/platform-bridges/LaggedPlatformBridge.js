@@ -34,6 +34,10 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
         return PLATFORM_ID.LAGGED
     }
 
+    get isLeaderboardNativePopupSupported() {
+        return true
+    }
+
     initialize() {
         if (this._isInitialized) {
             return Promise.resolve()
@@ -65,6 +69,8 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
                             this._playerId = id
                             this._playerName = name
                             this._playerPhotos.push(avatar)
+
+                            this._isPlayerAuthorized = this._playerId > 0
                         })
 
                         this._isInitialized = true
@@ -123,6 +129,56 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
         }
 
         this._platformSdk.GEvents.reward(canShowReward, rewardSuccess)
+    }
+
+    // leaderboard
+    setLeaderboardScore(options) {
+        if (!this._isPlayerAuthorized) {
+            return Promise.reject()
+        }
+
+        if (!options?.score || !options?.board) {
+            return Promise.reject()
+        }
+
+        let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
+        if (!promiseDecorator) {
+            promiseDecorator = this._createPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
+
+            if (typeof options.score === 'string') {
+                // eslint-disable-next-line no-param-reassign
+                options.score = parseInt(options.score, 10)
+            }
+
+            this._platformSdk.Scores.save(options, (response) => {
+                if (response.success) {
+                    this._resolvePromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
+                } else {
+                    this._rejectPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE, response.errormsg)
+                }
+            })
+        }
+
+        return promiseDecorator.promise
+    }
+
+    showLeaderboardNativePopup() {
+        let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP)
+        if (!promiseDecorator) {
+            promiseDecorator = this._createPromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP)
+
+            const scoresShownPromise = new Promise((resolve) => {
+                this._platformSdk.Scores.load(null, resolve)
+            })
+
+            Promise.race([scoresShownPromise, Promise.reject()])
+                .then(() => {
+                    this._resolvePromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP)
+                })
+                .catch(() => this._rejectPromiseDecorator(ACTION_NAME.SHOW_LEADERBOARD_NATIVE_POPUP))
+        }
+
+        return promiseDecorator.promise
     }
 }
 

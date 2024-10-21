@@ -1,14 +1,12 @@
 # Playgama Bridge
 One SDK for cross-platform publishing HTML5 games.
 
-> **Made with ❤️ by [Playgama](https://developer.playgama.com)**\
-> Playgama is a global game distributor that handles all matters related to game placement, moderation, and money transfers from any country.
-
 ## Supported platforms
 + [Playgama](https://playgama.com)
 + [Game Distribution](https://gamedistribution.com)
 + [Crazy Games](https://crazygames.com)
 + [Yandex Games](https://yandex.com/games)
++ [Y8](https://y8.com)
 + [Wortal](https://wortal.ai)
 + [PlayDeck](https://playdeck.io)
 + [Telegram](https://core.telegram.org/bots/webapps)

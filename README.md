@@ -28,4 +28,4 @@ One SDK for cross-platform publishing HTML5 games.
 + [Game Publishing](https://developer.playgama.com/)
 
 ## License
-This project is licensed under the terms of the GNU General Public License v3.0. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the terms of the GNU Lesser General Public License v3.0. See the [LICENSE](LICENSE) file for details.

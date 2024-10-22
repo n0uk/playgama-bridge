@@ -142,7 +142,7 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
             return Promise.reject()
         }
 
-        if (!options?.score || !options?.boardId) {
+        if (typeof options?.score === 'undefined' || !options?.boardId) {
             return Promise.reject()
         }
 

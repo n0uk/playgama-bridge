@@ -556,12 +556,12 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
 
-            if (typeof options.score === 'string') {
-                // eslint-disable-next-line no-param-reassign
-                options.score = parseInt(options.score, 10)
-            }
-
-            this.#leaderboards.setLeaderboardScore(options.leaderboardName, options.score)
+            this.#leaderboards.setLeaderboardScore(
+                options.leaderboardName,
+                typeof options.score === 'string'
+                    ? parseInt(options.score, 10)
+                    : options.score,
+            )
                 .then(() => {
                     this._resolvePromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
                 })
@@ -607,32 +607,24 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.GET_LEADERBOARD_ENTRIES)
 
-            const parameters = {
-                includeUser: false,
-                quantityAround: 5,
-                quantityTop: 5,
+            const parameters = {}
+
+            parameters.includeUser = typeof options.includeUser === 'boolean' ? options.includeUser : false
+
+            parameters.quantityAround = typeof options.quantityAround === 'string'
+                ? parseInt(options.quantityAround, 10)
+                : options.quantityAround
+
+            if (Number.isNaN(parameters.quantityAround)) {
+                parameters.quantityAround = 5
             }
 
-            if (typeof options.includeUser === 'boolean') {
-                parameters.includeUser = options.includeUser
-            }
+            parameters.quantityTop = typeof options.quantityTop === 'string'
+                ? parseInt(options.quantityTop, 10)
+                : options.quantityTop
 
-            if (typeof options.quantityAround === 'string') {
-                // eslint-disable-next-line no-param-reassign
-                options.quantityAround = parseInt(options.quantityAround, 10)
-            }
-
-            if (typeof options.quantityAround === 'number') {
-                parameters.quantityAround = options.quantityAround
-            }
-
-            if (typeof options.quantityTop === 'string') {
-                // eslint-disable-next-line no-param-reassign
-                options.quantityTop = parseInt(options.quantityTop, 10)
-            }
-
-            if (typeof options.quantityTop === 'number') {
-                parameters.quantityTop = options.quantityTop
+            if (Number.isNaN(parameters.quantityTop)) {
+                parameters.quantityTop = 5
             }
 
             this.#leaderboards.getLeaderboardEntries(options.leaderboardName, parameters)

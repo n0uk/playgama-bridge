@@ -91,7 +91,6 @@ class PlayDeckPlatformBridge extends PlatformBridgeBase {
 
                     this._isInitialized = true
                     this._resolvePromiseDecorator(ACTION_NAME.INITIALIZE)
-                    this.sendMessage(PLATFORM_MESSAGE.GAME_READY)
                 }
             }
 

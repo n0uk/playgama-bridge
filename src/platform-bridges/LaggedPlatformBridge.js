@@ -150,13 +150,10 @@ class LaggedPlatformBridge extends PlatformBridgeBase {
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
 
-            if (typeof options.score === 'string') {
-                // eslint-disable-next-line no-param-reassign
-                options.score = parseInt(options.score, 10)
-            }
-
             const params = {
-                score: options.score,
+                score: typeof options.score === 'string'
+                    ? parseInt(options.score, 10)
+                    : options.score,
                 board: options.boardId,
             }
 

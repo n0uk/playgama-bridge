@@ -295,9 +295,6 @@ class PlayDeckPlatformBridge extends PlatformBridgeBase {
                 if (!playdeck) return
 
                 if (playdeck.method === 'requestPayment') {
-                    // eslint-disable-next-line no-console
-                    console.log(playdeck.value.url)
-
                     window.parent.postMessage(
                         {
                             playdeck: {

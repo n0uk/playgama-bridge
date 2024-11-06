@@ -30,6 +30,7 @@ export const PLATFORM_ID = {
     Y8: 'y8',
     LAGGED: 'lagged',
     MOCK: 'mock',
+    QA_TOOL: 'qa_tool',
 }
 
 export const MODULE_NAME = {

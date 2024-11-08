@@ -31,6 +31,7 @@ export const PLATFORM_ID = {
     LAGGED: 'lagged',
     FACEBOOK: 'facebook',
     MOCK: 'mock',
+    QA_TOOL: 'qa_tool',
 }
 
 export const MODULE_NAME = {

@@ -56,6 +56,7 @@ import TelegramPlatformBridge from './platform-bridges/TelegramPlatformBridge'
 import Y8PlatformBridge from './platform-bridges/Y8PlatformBridge'
 import LaggedPlatformBridge from './platform-bridges/LaggedPlatformBridge'
 import FacebookPlatformBridge from './platform-bridges/FacebookPlatformBridge'
+import QaToolPlatformBridge from './platform-bridges/QaToolPlatformBridge'
 
 class PlaygamaBridge {
     get version() {
@@ -295,6 +296,10 @@ class PlaygamaBridge {
             }
             case PLATFORM_ID.FACEBOOK: {
                 this.#platformBridge = new FacebookPlatformBridge(_options)
+                break
+            }
+            case PLATFORM_ID.QA_TOOL: {
+                this.#platformBridge = new QaToolPlatformBridge(_options)
                 break
             }
             default: {

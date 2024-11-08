@@ -186,12 +186,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.PLAYER,
                 action: ACTION_NAME.AUTHORIZE_PLAYER,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -237,12 +237,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.PLATFORM,
                 action: ACTION_NAME_QA.GET_SERVER_TIME,
             })
-
-            this.#messageBroker.addListener(messageHandler)
 
             timeoutId = setTimeout(() => {
                 reject(new Error('Server time request timeout'))
@@ -281,12 +281,6 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
     }
 
     getDataFromStorage(key, storageType, tryParseJson) {
-        this.#messageBroker.send({
-            type: MODULE_NAME.STORAGE,
-            action: ACTION_NAME_QA.GET_DATA_FROM_STORAGE,
-            options: { key, storageType, tryParseJson },
-        })
-
         if (storageType === STORAGE_TYPE.PLATFORM_INTERNAL) {
             return new Promise((resolve) => {
                 const messageHandler = ({ data }) => {
@@ -298,8 +292,20 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
 
                 this.#messageBroker.addListener(messageHandler)
+
+                this.#messageBroker.send({
+                    type: MODULE_NAME.STORAGE,
+                    action: ACTION_NAME_QA.GET_DATA_FROM_STORAGE,
+                    options: { key, storageType, tryParseJson },
+                })
             })
         }
+
+        this.#messageBroker.send({
+            type: MODULE_NAME.STORAGE,
+            action: ACTION_NAME_QA.GET_DATA_FROM_STORAGE,
+            options: { key, storageType, tryParseJson },
+        })
 
         return super.getDataFromStorage(key, storageType, tryParseJson)
     }
@@ -556,12 +562,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.PAYMENTS,
                 action: ACTION_NAME.PURCHASE,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -579,12 +585,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.PAYMENTS,
                 action: ACTION_NAME.GET_PURCHASES,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -602,12 +608,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.PAYMENTS,
                 action: ACTION_NAME.GET_CATALOG,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -625,12 +631,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.PAYMENTS,
                 action: ACTION_NAME.CONSUME_PURCHASE,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
         return promiseDecorator.promise
     }
@@ -657,12 +663,12 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.REMOTE_CONFIG,
                 action: ACTION_NAME.GET_REMOTE_CONFIG,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -682,13 +688,13 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.CLIPBOARD,
                 action: ACTION_NAME.CLIPBOARD_WRITE,
                 options: { text },
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -707,13 +713,13 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.CLIPBOARD,
                 action: ACTION_NAME.CLIPBOARD_READ,
                 options: {},
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -754,13 +760,13 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.LEADERBOARD,
                 action: ACTION_NAME.GET_LEADERBOARD_SCORE,
                 options,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise
@@ -781,13 +787,13 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
                 }
             }
 
+            this.#messageBroker.addListener(messageHandler)
+
             this.#messageBroker.send({
                 type: MODULE_NAME.LEADERBOARD,
                 action: ACTION_NAME.GET_LEADERBOARD_ENTRIES,
                 options,
             })
-
-            this.#messageBroker.addListener(messageHandler)
         }
 
         return promiseDecorator.promise

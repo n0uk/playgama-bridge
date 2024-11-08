@@ -55,6 +55,7 @@ import WortalPlatformBridge from './platform-bridges/WortalPlatformBridge'
 import TelegramPlatformBridge from './platform-bridges/TelegramPlatformBridge'
 import Y8PlatformBridge from './platform-bridges/Y8PlatformBridge'
 import LaggedPlatformBridge from './platform-bridges/LaggedPlatformBridge'
+import FacebookPlatformBridge from './platform-bridges/FacebookPlatformBridge'
 import QaToolPlatformBridge from './platform-bridges/QaToolPlatformBridge'
 
 class PlaygamaBridge {
@@ -289,9 +290,12 @@ class PlaygamaBridge {
                 this.#platformBridge = new Y8PlatformBridge(_options)
                 break
             }
-
             case PLATFORM_ID.LAGGED: {
                 this.#platformBridge = new LaggedPlatformBridge(_options)
+                break
+            }
+            case PLATFORM_ID.FACEBOOK: {
+                this.#platformBridge = new FacebookPlatformBridge(_options)
                 break
             }
             case PLATFORM_ID.QA_TOOL: {

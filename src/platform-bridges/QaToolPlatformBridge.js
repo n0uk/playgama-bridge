@@ -64,8 +64,6 @@ const REWARD_STATUS = {
 }
 
 class QaToolPlatformBridge extends PlatformBridgeBase {
-    #messageBroker = new MessageBroker()
-
     get platformId() {
         return PLATFORM_ID.QA_TOOL
     }
@@ -138,6 +136,8 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
     get isLeaderboardNativePopupSupported() {
         return true
     }
+
+    #messageBroker = new MessageBroker()
 
     initialize() {
         if (this._isInitialized) {

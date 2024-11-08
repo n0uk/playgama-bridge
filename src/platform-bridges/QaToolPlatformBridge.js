@@ -642,16 +642,7 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
     }
 
     // config
-    getRemoteConfig(options) {
-        let remoteConfigOptions = options
-        if (!remoteConfigOptions) {
-            remoteConfigOptions = {}
-        }
-
-        if (!remoteConfigOptions.clientFeatures) {
-            remoteConfigOptions.clientFeatures = []
-        }
-
+    getRemoteConfig() {
         let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.GET_REMOTE_CONFIG)
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.GET_REMOTE_CONFIG)
@@ -731,15 +722,15 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)
 
-            if (typeof options.score === 'string') {
-                // eslint-disable-next-line no-param-reassign
-                options.score = parseInt(options.score, 10)
+            const scoreOptions = { ...options }
+            if (typeof scoreOptions.score === 'string') {
+                scoreOptions.score = parseInt(scoreOptions.score, 10)
             }
 
             this.#messageBroker.send({
                 type: MODULE_NAME.LEADERBOARD,
                 action: ACTION_NAME.SET_LEADERBOARD_SCORE,
-                options,
+                options: scoreOptions,
             })
 
             this._resolvePromiseDecorator(ACTION_NAME.SET_LEADERBOARD_SCORE)

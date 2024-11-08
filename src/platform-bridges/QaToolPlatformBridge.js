@@ -692,14 +692,14 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
     }
 
     clipboardRead() {
-        let promiseDecorator = this._getPromiseDecorator(ACTION_NAME.CLIPBOARD_READ)
+        let promiseDecorator = this._getPromiseDecorator(ACTION_NAME_QA.CLIPBOARD_READ)
         if (!promiseDecorator) {
-            promiseDecorator = this._createPromiseDecorator(ACTION_NAME.CLIPBOARD_READ)
+            promiseDecorator = this._createPromiseDecorator(ACTION_NAME_QA.CLIPBOARD_READ)
 
             const messageHandler = ({ data }) => {
-                if (data?.type === MODULE_NAME.CLIPBOARD && data.action === ACTION_NAME.CLIPBOARD_READ) {
+                if (data?.type === MODULE_NAME.CLIPBOARD && data.action === ACTION_NAME_QA.CLIPBOARD_READ) {
                     const { text } = data
-                    this._resolvePromiseDecorator(ACTION_NAME.CLIPBOARD_READ, text)
+                    this._resolvePromiseDecorator(ACTION_NAME_QA.CLIPBOARD_READ, text)
                     this.#messageBroker.removeListener(messageHandler)
                 }
             }
@@ -708,7 +708,7 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
 
             this.#messageBroker.send({
                 type: MODULE_NAME.CLIPBOARD,
-                action: ACTION_NAME.CLIPBOARD_READ,
+                action: ACTION_NAME_QA.CLIPBOARD_READ,
                 options: {},
             })
         }

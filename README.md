@@ -21,7 +21,8 @@ One SDK for cross-platform publishing HTML5 games.
 + [JS](https://github.com/playgama/bridge)
 + [Construct 3](https://github.com/playgama/bridge-construct)
 + [Unity](https://github.com/playgama/bridge-unity)
-+ [Godot](https://github.com/playgama/bridge-godot)
++ [Godot 3](https://github.com/playgama/bridge-godot)
++ [Godot 4](https://github.com/playgama/bridge-godot-4)
 
 ## Useful links
 + [Documentation](https://wiki.playgama.com/)

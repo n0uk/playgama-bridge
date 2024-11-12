@@ -15,6 +15,7 @@ One SDK for cross-platform publishing HTML5 games.
 + [OK](https://ok.ru)
 + [Absolute Games](https://ag.ru)
 + [Lagged](https://lagged.com)
++ [Facebook](https://www.facebook.com/games/instantgames)
 + Other [Work In Progress]
 
 ## Plugins for game engines

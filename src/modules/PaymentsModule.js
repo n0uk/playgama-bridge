@@ -22,16 +22,16 @@ class PaymentsModule extends ModuleBase {
         return this._platformBridge.isPaymentsSupported
     }
 
-    get isCatalogSupported() {
-        return this._platformBridge.isCatalogSupported
+    get isGetCatalogSupported() {
+        return this._platformBridge.isGetCatalogSupported
     }
 
-    get isPurchaseListSupported() {
-        return this._platformBridge.isPurchaseListSupported
+    get isGetPurchasesSupported() {
+        return this._platformBridge.isGetPurchasesSupported
     }
 
-    get isPurchaseConsumingSupported() {
-        return this._platformBridge.isPurchaseConsumingSupported
+    get isConsumePurchaseSupported() {
+        return this._platformBridge.isConsumePurchaseSupported
     }
 
     purchase(options) {

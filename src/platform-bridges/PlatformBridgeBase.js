@@ -184,15 +184,15 @@ class PlatformBridgeBase {
         return false
     }
 
-    get isCatalogSupported() {
+    get isGetCatalogSupported() {
         return false
     }
 
-    get isPurchaseListSupported() {
+    get isGetPurchasesSupported() {
         return false
     }
 
-    get isPurchaseConsumingSupported() {
+    get isConsumePurchaseSupported() {
         return false
     }
 

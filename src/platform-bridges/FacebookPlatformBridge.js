@@ -105,15 +105,15 @@ class FacebookPlatformBridge extends PlatformBridgeBase {
         return this._supportedApis.includes('payments.purchaseAsync')
     }
 
-    get isCatalogSupported() {
+    get isGetCatalogSupported() {
         return this._supportedApis.includes('payments.getCatalogAsync')
     }
 
-    get isPurchaseListSupported() {
+    get isGetPurchasesSupported() {
         return this._supportedApis.includes('payments.getPurchasesAsync')
     }
 
-    get isPurchaseConsumingSupported() {
+    get isConsumePurchaseSupported() {
         return this._supportedApis.includes('payments.consumePurchaseAsync')
     }
 

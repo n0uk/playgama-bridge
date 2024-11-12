@@ -206,6 +206,9 @@
             <div class="section" id="payments-section" style="display: none">
                 <h2>Payments</h2>
                 <p>Is Supported: <span id="payments-is-supported-text"></span></p>
+                <p>Is Get Catalog Supported: <span id="payments-is-get-catalog-supported-text"></span></p>
+                <p>Is Get Purchases Supported: <span id="payments-is-get-purchases-supported-text"></span></p>
+                <p>Is Consume Purchase Supported: <span id="payments-is-consume-purchase-supported-text"></span></p>
                 <hr>
                 <button id="payments-get-purchases-button">Get Purchases</button>
                 <pre id="payments-purchases-container"></pre>
@@ -361,6 +364,9 @@
                 const leaderboardEntriesContainer = document.getElementById('leaderboard-entries-container')
 
                 const paymentsIsSupportedText = document.getElementById('payments-is-supported-text')
+                const paymentsIsGetCatalogSupportedText = document.getElementById('payments-is-get-catalog-supported-text')
+                const paymentsIsGetPurchasesSupportedText = document.getElementById('payments-is-get-purchases-supported-text')
+                const paymentsIsConsumePurchaseSupportedText = document.getElementById('payments-is-consume-purchase-supported-text')
                 const paymentsGetPurchasesButton = document.getElementById('payments-get-purchases-button')
                 const paymentPurchasesContainer = document.getElementById('payments-purchases-container')
                 const paymentsGetCatalogButton = document.getElementById('payments-get-catalog-button')
@@ -481,6 +487,9 @@
                         leaderboardIsGetEntriesSupportedText.innerText = bridge.leaderboard.isGetEntriesSupported
 
                         paymentsIsSupportedText.innerText = bridge.payments.isSupported
+                        paymentsIsGetCatalogSupportedText.innerText = bridge.payments.isGetCatalogSupported
+                        paymentsIsGetPurchasesSupportedText.innerText = bridge.payments.isGetPurchasesSupported
+                        paymentsIsConsumePurchaseSupportedText.innerText = bridge.payments.isConsumePurchaseSupported
                         remoteConfigIsSupportedText.innerText = bridge.remoteConfig.isSupported
                         clipboardIsSupportedText.innerText = bridge.clipboard.isSupported
 

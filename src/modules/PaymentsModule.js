@@ -22,6 +22,18 @@ class PaymentsModule extends ModuleBase {
         return this._platformBridge.isPaymentsSupported
     }
 
+    get isGetCatalogSupported() {
+        return this._platformBridge.isGetCatalogSupported
+    }
+
+    get isGetPurchasesSupported() {
+        return this._platformBridge.isGetPurchasesSupported
+    }
+
+    get isConsumePurchaseSupported() {
+        return this._platformBridge.isConsumePurchaseSupported
+    }
+
     purchase(options) {
         if (options) {
             const platformDependedOptions = options[this._platformBridge.platformId]

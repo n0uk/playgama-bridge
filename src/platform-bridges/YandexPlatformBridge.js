@@ -117,6 +117,18 @@ class YandexPlatformBridge extends PlatformBridgeBase {
         return true
     }
 
+    get isGetCatalogSupported() {
+        return true
+    }
+
+    get isGetPurchasesSupported() {
+        return true
+    }
+
+    get isConsumePurchaseSupported() {
+        return true
+    }
+
     // config
     get isRemoteConfigSupported() {
         return true

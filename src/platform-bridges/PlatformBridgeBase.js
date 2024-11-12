@@ -184,6 +184,18 @@ class PlatformBridgeBase {
         return false
     }
 
+    get isGetCatalogSupported() {
+        return false
+    }
+
+    get isGetPurchasesSupported() {
+        return false
+    }
+
+    get isConsumePurchaseSupported() {
+        return false
+    }
+
     // config
     get isRemoteConfigSupported() {
         return false

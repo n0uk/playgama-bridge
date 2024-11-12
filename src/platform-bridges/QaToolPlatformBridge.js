@@ -78,6 +78,18 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
         return true
     }
 
+    get isCatalogSupported() {
+        return true
+    }
+
+    get isPurchaseListSupported() {
+        return true
+    }
+
+    get isPurchaseConsumingSupported() {
+        return true
+    }
+
     // config
     get isRemoteConfigSupported() {
         return true

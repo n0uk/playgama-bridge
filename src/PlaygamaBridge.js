@@ -230,6 +230,8 @@ class PlaygamaBridge {
                 platformId = PLATFORM_ID.PLAYDECK
             } else if (url.hash.includes('tgWebAppData')) {
                 platformId = PLATFORM_ID.TELEGRAM
+            } else if (url.hash.includes('y8')) {
+                platformId = PLATFORM_ID.Y8
             }
         }
 

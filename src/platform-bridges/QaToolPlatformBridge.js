@@ -159,7 +159,7 @@ class QaToolPlatformBridge extends PlatformBridgeBase {
         if (!promiseDecorator) {
             promiseDecorator = this._createPromiseDecorator(ACTION_NAME.INITIALIZE)
 
-            this._defaultStorageType = STORAGE_TYPE.LOCAL_STORAGE
+            this._defaultStorageType = STORAGE_TYPE.PLATFORM_INTERNAL
             this._isInitialized = true
             this._isBannerSupported = true
             this._resolvePromiseDecorator(ACTION_NAME.INITIALIZE)
